@@ -11,13 +11,17 @@ class Circulo {
             return area;
         };
 
+        float calcPerimetro(){
+            perimetro = 2 * pi * raio;
+            return perimetro;
+        };
+
         void setRaio(float _raio){
             raio = _raio;
         };
 
     private:
-        float raio;
-        float area;
+        float raio,area,perimetro;
 };
 
 int main(){
@@ -27,6 +31,7 @@ int main(){
     std::cin >> raio;
     meuCirculo.setRaio(raio);
     float area = meuCirculo.calcArea();
-    std::cout << "A area do circulo eh: " << area;
+    float perimetro = meuCirculo.calcPerimetro();
+    std::cout << "\nA area do circulo eh: " << area << "\nA circunferencia do circulo eh: " << perimetro << "\n\n";
     return 0;
 }
