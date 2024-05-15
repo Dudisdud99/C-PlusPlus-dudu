@@ -111,7 +111,7 @@ void menuTecnico(){
         std::cin >> bonus;
         tec.setBonus(bonus);
     }
-    else if(op==5){
+    else{
         std::cout << "Opcao invalida\n";
         menuTecnico();
     }
@@ -120,7 +120,7 @@ void menuTecnico(){
 void menuAdministrativo(){
     Administrativo adm; 
     Funcionario fun;
-    int op;
+    int op,turno;
     std::cout <<"\nQual acao vc deseja fazer?\n1 - Add aumento\n2 - Exibir informacoes\n3 - Mudar bonus\n5 - Sair\nSua opcao: ";
     std::cin >> op;
     if(op==-1){
@@ -147,8 +147,8 @@ int main(){
     fun.setSalario(salario);
     ass.setMatricula(matricula);
 
-    while(cargo!=1 && cargo!=2){
-        std::cout << "\nDigite o cargo do funcionario:\n1 - Assistente tecnico\n2 - Assistente administrativo\nSua opcao: ";
+    while(cargo!=3){
+        std::cout << "\nDigite o cargo do funcionario:\n1 - Assistente tecnico\n2 - Assistente administrativo\n3 - sair\nSua opcao: ";
         std::cin >> cargo;
         if(cargo==1){
             menuTecnico();
@@ -157,6 +157,7 @@ int main(){
             menuAdministrativo();
         }
         else{
+            std::cout << "Opcao invalida\n";
             break;
         }
     }
