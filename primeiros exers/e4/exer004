@@ -1,0 +1,2 @@
+Deve ser uma composição pois o carro tem um motor, o motor é um componente do carro, se excluir o carro voce tambem quer que o motor seja excluido, para não ocupar memória.
+E a cardinalidade deve ser de 1/n, sendo que o lado "1" o carro e o lado "n" o motor, pois um carro pode ter mais de um motor, e o motor pode estar em sómente um carro (não reciclado).
