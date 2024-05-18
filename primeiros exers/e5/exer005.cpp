@@ -3,8 +3,6 @@
 #include <vector>
 #include "usuario.hpp"
 
-std::vector<Usuario*> usuarios;
-
 // opções de usuário
 
 void opcoesUsuario(Usuario* usuario) {
@@ -40,7 +38,6 @@ void cadastro() {
         std::cout << "\nDigite o nome de usuário: ";
         std::cin >> login;
 
-        // Verificar se o nome de usuário já existe
         bool existe = false;
         for (Usuario* usuario : usuarios) {
             if (usuario->getLogin() == login) {
@@ -120,6 +117,11 @@ int main() {
         delete usuario;
     }
     usuarios.clear();
+
+    for (Emprestimo* emprestimo : emprestimos) {
+        delete emprestimo;
+    }
+    emprestimos.clear();
 
     return 0;
 }
