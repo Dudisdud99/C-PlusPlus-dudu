@@ -31,8 +31,7 @@ void opcoesUsuario(Usuario* usuario) {
 // inicio de sessão
 
 void cadastro() {
-    std::string login;
-    std::string senha;
+    std::string login, senha;
 
     while (true) {
         std::cout << "\nDigite o nome de usuário: ";
@@ -117,11 +116,6 @@ int main() {
         delete usuario;
     }
     usuarios.clear();
-
-    for (Emprestimo* emprestimo : emprestimos) {
-        delete emprestimo;
-    }
-    emprestimos.clear();
 
     return 0;
 }

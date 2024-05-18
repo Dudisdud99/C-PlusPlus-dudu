@@ -8,7 +8,12 @@ class Usuario {
         Usuario(){
             multa = 0;
         };
-        ~Usuario(){};
+        ~Usuario(){
+            for (Emprestimo* emprestimo : emprestimos) {
+                delete emprestimo;
+            }
+            emprestimos.clear();
+        };
 
         void setLoginSenha(std::string _login, std::string _senha){
             senha = _senha;
@@ -38,14 +43,14 @@ class Usuario {
             if(emprestimos.size() > 0){
                 std::cout << "\nLivros emprestados: " << std::endl;
                 for(Emprestimo* emprestimo : emprestimos){
-                    std::cout << "\nData de empréstimo: " << emprestimo->getDataEmprestimo() << std::endl;
-                    std::cout << "Data de devolução: " << emprestimo->getDataDevolucao() << std::endl;
+                    std::cout << "\nData de empréstimo: " << emprestimo->getDataEmprestimo();
+                    std::cout << "Data de devolução: " << emprestimo->getDataDevolucao();
                 }
             }
         }
 
-         void emprestarLivro(){
-            Emprestimo* emprestimo = new Emprestimo(login);
+        void emprestarLivro(){
+            Emprestimo* emprestimo = new Emprestimo();
             emprestimos.push_back(emprestimo);
         }
 
@@ -55,10 +60,15 @@ class Usuario {
 
         void pagarMulta(){}
 
+
+
+
     private:
         std::string senha, login;
         float multa;
         bool status;
+        std::vector<Emprestimo*> emprestimos;
+
 };
 
 std::vector<Usuario*> usuarios;
