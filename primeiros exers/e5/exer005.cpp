@@ -5,7 +5,7 @@
 
 // opções de usuário
 
-void opcoesUsuario(Usuario* usuario) {
+int opcoesUsuario(Usuario* usuario) {
     int opcao;
 
     while (true){
@@ -26,6 +26,7 @@ void opcoesUsuario(Usuario* usuario) {
             std::cout << "\nOpção inválida\n";
         }
     }
+    return 0;
 }
 
 // inicio de sessão
@@ -108,14 +109,29 @@ void inicio() {
     } while(opcao != 0);
 }
 
+// inicialização de multas
+
+void iniciarMultas() {
+    for (Usuario* usuario : usuarios) {
+        usuario->calcMulta();
+    }
+}
 
 int main() {
+
+    inicializarLivros();
+    iniciarMultas();
     inicio();
 
     for (Usuario* usuario : usuarios) {
         delete usuario;
     }
     usuarios.clear();
+
+    for (Livro* livro : livros) {
+        delete livro;
+    }
+    livros.clear();
 
     return 0;
 }

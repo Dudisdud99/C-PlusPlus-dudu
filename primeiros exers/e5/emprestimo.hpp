@@ -5,13 +5,10 @@
 
 class Emprestimo {
     public:
-        // Emprestimo(std::string _usuario) : usuario(_usuario){
-        //     dataEmprestimo = std::chrono::system_clock::now();
-        //     dataDevolucao = dataEmprestimo + std::chrono::hours(24*7);
-        // };
-        Emprestimo(){
+        Emprestimo(int _id){
+            idLivro = _id;
             dataEmprestimo = std::chrono::system_clock::now();
-            dataDevolucao = dataEmprestimo + std::chrono::hours(24*7);
+            dataDevolucao = dataEmprestimo + std::chrono::hours(24*7*2);
         };
     	~Emprestimo(){};
 
@@ -25,9 +22,26 @@ class Emprestimo {
             return std::ctime(&time);
         }
 
+        float calcMulta(){
+            float multa =0;
+            int diferencaHoras = 0;
+            std::chrono::time_point<std::chrono::system_clock> agora = std::chrono::system_clock::now();
+            if(agora > dataDevolucao){
+                diferencaHoras = std::chrono::duration_cast<std::chrono::hours>(agora - dataDevolucao).count();
+                multa = diferencaHoras/24 * 50;
+            }
+            return multa;
+        }
+
+        void setIdLivro(int _id){
+            idLivro = _id;
+        }
+
+        int getIdLivro(){
+            return idLivro;
+        }
 
     private:
         std::chrono::time_point<std::chrono::system_clock> dataEmprestimo, dataDevolucao;
-        bool status;
-        
+        int idLivro;
 };
