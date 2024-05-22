@@ -1,3 +1,5 @@
+#ifndef LIVRO_HPP
+#define LIVRO_HPP
 #include <iostream>
 #include <string>
 #include <vector>
@@ -62,17 +64,4 @@ class Livro{
         int ano, id;
         bool status;
 };
-
-std::vector<Livro*> livros;
-
-void inicializarLivros(){
-    for (int i = 0; i < 10; i++) {
-        Livro* livro = new Livro();
-        livro->setTitulo("Livro " + std::to_string(i+1));
-        livro->setAutor("Autor " + std::to_string(i+1));
-        livro->setAno(2000 + i+1);
-        livro->setGenero("Genero " + std::to_string(i+1));
-        livro->setId(i+1);
-        livros.push_back(livro);
-    }
-}
+#endif

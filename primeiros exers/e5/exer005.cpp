@@ -2,36 +2,13 @@
 #include <string>
 #include <vector>
 #include "usuario.hpp"
-
-// opções de usuário
-
-int opcoesUsuario(Usuario* usuario) {
-    int opcao;
-
-    while (true){
-        std::cout << "\n1 - Emprestar livro\n2 - Devolver livro\n3 - Pagar multa\n4 - Exibir dados\n0 - Sair\nSua opção: ";
-        std::cin >> opcao;
-
-        if (opcao == 1) {
-            usuario->emprestarLivro();
-        } else if (opcao == 2) {
-            usuario->devolverLivro();
-        } else if (opcao == 3) {
-            usuario->pagarMulta();
-        } else if(opcao == 4) {
-            usuario->exibirDados();
-        } else if (opcao == 0) {
-            break;
-        } else {
-            std::cout << "\nOpção inválida\n";
-        }
-    }
-    return 0;
-}
+#include "adm.hpp"
+#include "livro.hpp"
+#define senhaAdm "admin"
 
 // inicio de sessão
 
-void cadastro() {
+void cadastro(std::vector<Usuario*>& usuarios, std::vector<Adm*>& adms) {
     std::string login, senha;
 
     while (true) {
@@ -56,15 +33,20 @@ void cadastro() {
     std::cout << "Digite a senha: ";
     std::cin >> senha;
 
-    Usuario* usuario = new Usuario();
-    usuario->setLoginSenha(login, senha);
-
-    usuarios.push_back(usuario);
+    if(senha==senhaAdm){
+        Adm* adm = new Adm(login, senha);
+        adms.push_back(adm);
+    }
+    else{
+        Usuario* usuario = new Usuario();
+        usuario->setLoginSenha(login, senha);
+        usuarios.push_back(usuario);
+    }
 
     std::cout << "\nUsuário adicionado: \n";
 }
 
-void login() {
+void login(std::vector<Usuario*>& usuarios, std::vector<Livro*>& livros) {
     std::string login, senha;
 
     std::cout << "\nDigite o nome de usuário: ";
@@ -74,21 +56,29 @@ void login() {
     std::cin >> senha;
 
     bool found = false;
-    for (Usuario* usuario : usuarios) {
-        if (usuario->getLogin() == login && usuario->getSenha() == senha) {
-            std::cout << "\nUsuário logado\n";
-            opcoesUsuario(usuario);
-            found = true;
-            break;
+
+    if(senha=="admin" && login=="admin"){
+        std::cout << "\nAdiminstrador logado\n";
+        // opcoesUsuario();
+        return;
+    }
+    else{
+        for (Usuario* usuario : usuarios) {
+            if (usuario->getLogin() == login && usuario->getSenha() == senha) {
+                std::cout << "\nUsuário logado\n";
+                usuario->opcoesUsuario(livros);
+                found = true;
+                break;
+            }
         }
     }
 
-    if (found == false) {
+    if(found == false) {
         std::cout << "\nUsuário ou senha inválidos\n";
     }
 }
 
-void inicio() {
+void inicio(std::vector<Usuario*>& usuarios, std::vector<Livro*>& livros, std::vector<Adm*>& adms) {
     int opcao;
     
     std::cout << "\nBem-vindo ao sistema de biblioteca\n";
@@ -98,9 +88,9 @@ void inicio() {
         std::cin >> opcao;
 
         if (opcao == 1) {
-            cadastro();
+            cadastro(usuarios, adms);
         } else if (opcao == 2) {
-            login();
+            login(usuarios, livros);
         } else if (opcao == 0) {
             return;
         } else {
@@ -109,19 +99,34 @@ void inicio() {
     } while(opcao != 0);
 }
 
-// inicialização de multas
+// inicialização de adicionais
 
-void iniciarMultas() {
+void iniciarMultas(std::vector<Usuario*>& usuarios) {
     for (Usuario* usuario : usuarios) {
         usuario->calcMulta();
     }
 }
 
-int main() {
+void inicializarLivros(std::vector<Livro*>& livros){
+    for (int i = 0; i < 10; i++) {
+        Livro* livro = new Livro();
+        livro->setTitulo("Livro " + std::to_string(i+1));
+        livro->setAutor("Autor " + std::to_string(i+1));
+        livro->setAno(2000 + i+1);
+        livro->setGenero("Genero " + std::to_string(i+1));
+        livro->setId(i);
+        livros.push_back(livro);
+    }
+}
 
-    inicializarLivros();
-    iniciarMultas();
-    inicio();
+int main() {
+    std::vector<Usuario*> usuarios;
+    std::vector<Livro*> livros;
+    std::vector<Adm*> adms;
+
+    inicializarLivros(livros);
+    iniciarMultas(usuarios);
+    inicio(usuarios, livros, adms);
 
     for (Usuario* usuario : usuarios) {
         delete usuario;

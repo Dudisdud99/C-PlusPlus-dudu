@@ -1,3 +1,5 @@
+#ifndef USUARIO_HPP
+#define USUARIO_HPP
 #include <iostream>
 #include <string>
 #include <vector>
@@ -37,7 +39,7 @@ class Usuario {
             status = _status;
         }
 
-        void exibirDados(){
+        void exibirDados(std::vector<Livro*> livros){
             std::cout << "\nLogin: " << login << std::endl;
             std::cout << "Multa: " << multa << std::endl;
 
@@ -45,22 +47,22 @@ class Usuario {
                 std::cout << "\nLivros emprestados: " << std::endl;
                 for(Emprestimo* emprestimo : emprestimos){
                     int id = emprestimo->getIdLivro();
-                    std::cout << "\nLivro: " << livros[id-1]->getTitulo() << "\nID: " << id << std::endl;
+                    std::cout << "\nLivro: " << livros[id]->getTitulo() << "\nID: " << id+1 << std::endl;
                     std::cout << "Data de empréstimo: " << emprestimo->getDataEmprestimo();
                     std::cout << "Data de devolução: " << emprestimo->getDataDevolucao();
-                    if(livros[id-1]->getStatus()){
-                        std::cout << "!!Status: Devolvido!!\n\n";
+                    if(livros[id]->getStatus()){
+                        std::cout << "!!Devolvido!!\n";
                     }
                 }
             }
         }
 
-        void emprestarLivro(){
+        void emprestarLivro(std::vector<Livro*> livros){
             if(multa > 300){
                 std::cout << "\nUsuário bloqueado por excesso de multa\n";
                 return;
             }
-            int id = livrosDisponiveis();
+            int id = livrosDisponiveis(livros);
             Emprestimo* emprestimo = new Emprestimo(id);
             emprestimos.push_back(emprestimo);
         }
@@ -73,17 +75,17 @@ class Usuario {
             setMulta(multa);
         }
 
-        void devolverLivro(){
+        void devolverLivro(std::vector<Livro*> livros){
             int op;
             bool devolvido = false;
             for(Emprestimo* emprestimo : emprestimos){
                 int id = emprestimo->getIdLivro();
-                std::cout << "\nLivro: " << livros[id-1]->getTitulo() << "\nID: " << id << std::endl;
+                std::cout << "\nLivro: " << livros[id]->getTitulo() << "\nID: " << id+1 << std::endl;
             }
             std::cout << "\nDigite o ID de um livro para devolver: ";
             std::cin >> op;
             for(Emprestimo* emprestimo : emprestimos){
-                if(op == emprestimo->getIdLivro()){
+                if(op-1 == emprestimo->getIdLivro()){
                     livros[op-1]->setStatus(true);
                     devolvido = true;
                     break;
@@ -106,14 +108,14 @@ class Usuario {
             std::cout << "\nMulta paga com sucesso\n";
         }
 
-        int livrosDisponiveis(){
+        int livrosDisponiveis(std::vector<Livro*> livros){
             int nLivro;
             std::cout << "\nEscolha um livro e digite seu ID\n";
             for (int i = 0; i < livros.size(); i++) {
                 Livro* livro = livros[i];
                 bool status = livros[i]->getStatus();
                 if(status){
-                    std::cout << "Livro: " << livro->getTitulo() << ", ID: " << livro->getId()  << ", Autor: " << livro->getAutor() << ", Ano: "<< livro->getAno() << std::endl;
+                    std::cout << "Livro: " << livro->getTitulo() << ", ID: " << livro->getId()+1  << ", Autor: " << livro->getAutor() << ", Ano: "<< livro->getAno() << std::endl;
                 }
             }
             std::cout << "\nSua escolha: ";
@@ -127,6 +129,30 @@ class Usuario {
             return id;
         }
 
+        int opcoesUsuario(std::vector<Livro*> livros) {
+            int opcao;
+
+            while (true){
+                std::cout << "\n1 - Emprestar livro\n2 - Devolver livro\n3 - Pagar multa\n4 - Exibir dados\n0 - Sair\nSua opção: ";
+                std::cin >> opcao;
+
+                if (opcao == 1) {
+                    emprestarLivro(livros);
+                } else if (opcao == 2) {
+                    devolverLivro(livros);
+                } else if (opcao == 3) {
+                    pagarMulta();
+                } else if(opcao == 4) {
+                    exibirDados(livros);
+                } else if (opcao == 0) {
+                    break;
+                } else {
+                    std::cout << "\nOpção inválida\n";
+                }
+            }
+            return 0;
+        }
+
     private:
         std::string senha, login;
         float multa;
@@ -134,5 +160,4 @@ class Usuario {
         std::vector<Emprestimo*> emprestimos;
 
 };
-
-std::vector<Usuario*> usuarios;
+#endif

@@ -1,3 +1,5 @@
+#ifndef EMPRESTIMO_HPP
+#define EMPRESTIMO_HPP
 #include <iostream>
 #include <chrono>
 #include <string>
@@ -45,3 +47,4 @@ class Emprestimo {
         std::chrono::time_point<std::chrono::system_clock> dataEmprestimo, dataDevolucao;
         int idLivro;
 };
+#endif
