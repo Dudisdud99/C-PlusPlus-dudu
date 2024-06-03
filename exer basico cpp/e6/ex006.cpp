@@ -25,12 +25,16 @@ class Funcionario {
             salario = _salario;
         }
 
-        float addAumento(float _valor){
+        void addAumento(float _valor){
             salario += _valor;
         }
 
-        float ganhoAnual(){
+        void ganhoAnual(){
             salario *= 12;
+        }
+
+        void exibirDados(){
+            std::cout << "Nome: " << nome << "\nSalario: " << salario << "\n";
         }
     
     protected:
@@ -60,16 +64,20 @@ class Tecnico : protected Assistente {
         Tecnico(){};
         ~Tecnico(){};
 
-        float ganhoAnual(){
-
-        }
-
-        void exibirDados(){
-            std::cout << "Aparece aqui";
+        void ganhoAnual(){
+            salario *= 12;
         }
 
         void setBonus(float _bonus){
             bonus = _bonus;
+        }
+
+        void addAumento(float _valor){
+            salario += _valor;
+        }
+
+        void exibirDados(){
+            std::cout << "Nome: " << nome << "\nSalario: " << salario+bonus << "\nBonus: " << bonus << "\nSalario anual: " << salario*12 << "\n";
         }
 
     private:
@@ -81,16 +89,16 @@ class Administrativo : protected Assistente {
         Administrativo(){};
         ~Administrativo(){};
 
-        float ganhoAnual(){
-
+        void setBonusNoturno(float _bonus){
+            adicionalNoturno = _bonus;
         }
 
         void exibirDados(){
-            std::cout << "Aparece aqui";
-        }
+            std::cout << "Nome: " << nome << "\nSalario: " << salario+adicionalNoturno << "\nTurno: " << turno << "\nAdicional noturno: " << adicionalNoturno << "\nSalario anual: " << salario*12 << "\n";
+        }   
 
-        void setBonusNoturno(float _bonus){
-            adicionalNoturno = _bonus;
+        void addAumento(float _valor){
+            salario += _valor;
         }
 
     private:
@@ -98,9 +106,7 @@ class Administrativo : protected Assistente {
         float adicionalNoturno;
 };
 
-void menuTecnico(){
-    Tecnico tec;
-    Funcionario fun;
+void menuTecnico(Tecnico tec){
     int op;
     std::cout <<"\nQual acao vc deseja fazer?\n1 - Add aumento\n2 - Exibir informacoes\n3 - Mudar bonus\noutro - Sair\nSua opcao: ";
     std::cin >> op;
@@ -108,25 +114,23 @@ void menuTecnico(){
         float valor;
         std::cout << "Digite o valor do aumento: ";
         std::cin >> valor;
-        fun.addAumento(valor);
-        menuTecnico();
+        tec.addAumento(valor);
+        menuTecnico(tec);
     }
     else if(op==2){
         tec.exibirDados();
-        menuTecnico();
+        menuTecnico(tec);
     }
     else if(op==3){
         float bonus;
         std::cout << "Digite o valor do bonus: ";
         std::cin >> bonus;
         tec.setBonus(bonus);
-        menuTecnico();
+        menuTecnico(tec);
     }
 }
 
-void menuAdministrativo(){
-    Administrativo adm; 
-    Funcionario fun;
+void menuAdministrativo(Administrativo adm){
     int op, turno;
     std::cout <<"\nQual o seu turno?\n1 - noite\n2 - dia\nSua opcao: ";
     std::cin >> op;
@@ -138,7 +142,7 @@ void menuAdministrativo(){
     }
     else{
         std::cout << "Opcao invalida\n";
-        menuAdministrativo();
+        menuAdministrativo(adm);
     }
     while(op!=5){
         if(turno==1){
@@ -153,7 +157,7 @@ void menuAdministrativo(){
             float valor;
             std::cout << "Digite o valor do aumento: ";
             std::cin >> valor;
-            fun.addAumento(valor);
+            adm.addAumento(valor);
         }
         else if(op==2){
             adm.exibirDados();
@@ -175,7 +179,9 @@ void menuAdministrativo(){
 
 int main(){
     Funcionario fun;
-    Assistente ass;
+    Assistente ass;    
+    Administrativo adm; 
+    Tecnico tec;
 
     std::string nome;
     float salario;
@@ -194,12 +200,12 @@ int main(){
 
     while(cargo!=5){
         std::cout << "\nDigite o cargo do funcionario:\n1 - Assistente tecnico\n2 - Assistente administrativo\n5 - sair\nSua opcao: ";
-        std::cin >> cargo;
+        std::cin >> cargo; 
         if(cargo==1){
-            menuTecnico();
+            menuTecnico(tec);
         }
         else if(cargo==2){
-            menuAdministrativo();
+            menuAdministrativo(adm);
         }
         else{
             std::cout << "Opcao invalida\n";
